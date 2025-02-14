@@ -1,17 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import type { Token } from "@coinbase/onchainkit/token";
@@ -20,13 +10,11 @@ import { SwapAmountInput } from "./swap/components/SwapAmountInput";
 import { SwapButton } from "./swap/components/SwapButton";
 import { SwapMessage } from "./swap/components/SwapMessage";
 import { SwapToast } from "./swap/components/SwapToast";
+import { ClaimView } from "./ClaimView";
 
-// import { useAccount } from "wagmi";
 import { LifecycleStatus, SwapError } from "./swap/types";
 
 function CustomTab() {
-  //   const { address } = useAccount();
-
   const WETHToken: Token = {
     address: "0x4200000000000000000000000000000000000006",
     chainId: 84532,
@@ -59,26 +47,26 @@ function CustomTab() {
   const swappableTokens: Token[] = [WETHToken, DGMToken];
 
   return (
-    <Tabs defaultValue="donate" className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="donate">Donate</TabsTrigger>
-        <TabsTrigger value="claim">Claim</TabsTrigger>
-      </TabsList>
-      <TabsContent value="donate">
-        <Card>
-          <CardHeader></CardHeader>
-          <CardContent className="space-y-2">
-            <SwapProvider
-              onError={(e: SwapError) => {
-                console.log(e.message);
-              }}
-              onStatus={(e: LifecycleStatus) => {
-                console.log(e.statusName);
-              }}
-              onSuccess={(r: any) => {
-                console.log(r);
-              }}
-            >
+    <SwapProvider
+      onError={(e: SwapError) => {
+        console.log(e.message);
+      }}
+      onStatus={(e: LifecycleStatus) => {
+        console.log(e.statusName);
+      }}
+      onSuccess={(r: any) => {
+        console.log(r);
+      }}
+    >
+      <Tabs defaultValue="donate" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="donate">Donate</TabsTrigger>
+          <TabsTrigger value="claim">Claim</TabsTrigger>
+        </TabsList>
+        <TabsContent value="donate">
+          <Card>
+            <CardHeader></CardHeader>
+            <CardContent className="space-y-2">
               <>
                 <SwapAmountInput
                   label="Convert"
@@ -88,41 +76,23 @@ function CustomTab() {
                 />
                 <div className="relative h-1">{/* <SwapToggleButton /> */}</div>
                 <SwapAmountInput label="To" token={BUILDToken} type="to" />
-                <SwapButton disabled={false} />
+                <SwapButton disabled={false} buttonText="Donate" />
                 <SwapToast />
                 <div className="flex">
                   <SwapMessage />
                 </div>
               </>
-            </SwapProvider>
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="claim">
-        <Card>
-          <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here. After saving, you&apos;ll be logged
-              out.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button size="sm">Save password</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-    </Tabs>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="claim">
+          <Card>
+            <ClaimView />
+            <SwapToast />
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </SwapProvider>
   );
 }
 

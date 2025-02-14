@@ -19,6 +19,7 @@ import { useValue } from "../hooks/useValue";
 import { formatTokenAmount } from "../utils/formatTokenAmount";
 import { useQuote } from "../hooks/useQuote";
 import { useDonate } from "../hooks/useDonate";
+import { useFetchClaim } from "../hooks/useFetchClaim";
 import { BigNumberish, ethers } from "ethers";
 import {
   encodeExactInput,
@@ -68,6 +69,7 @@ export function SwapProvider({
   const [transactionHash, setTransactionHash] = useState("");
   const [hasHandledSuccess, setHasHandledSuccess] = useState(false);
   const [latestCalldata, setLatestCalldata] = useState<SwapParam>();
+  const [claim, setClaim] = useState<bigint>();
 
   const { from, to } = useFromTo(address);
   const { sendTransactionAsync } = useSendTransaction();
@@ -88,7 +90,33 @@ export function SwapProvider({
     amountIn: from.amount,
   });
 
+  const {
+    allocation,
+    refetch: quoteRefetch,
+    withdrawAlloc,
+  } = useFetchClaim({
+    userAddress: address,
+  });
+
   // Component lifecycle emitters
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (address) {
+        updateLifecycleStatus({
+          statusName: "fetching_claim",
+        });
+
+        const { data, error } = await quoteRefetch();
+
+        console.log("claim: ", data, error, allocation);
+        setClaim(data as bigint);
+      }
+    };
+
+    fetch();
+  }, [address, lifecycleStatus.statusName]);
+
   useEffect(() => {
     // Error
     if (lifecycleStatus.statusName === "error") {
@@ -96,10 +124,6 @@ export function SwapProvider({
     }
     // Success
     if (lifecycleStatus.statusName === "success") {
-      //   onSuccess?.(lifecycleStatus.statusData.transactionReceipt);
-      //   setTransactionHash(
-      //     lifecycleStatus.statusData?.transactionReceipt.transactionHash
-      //   );
       setHasHandledSuccess(true);
       setIsToastVisible(true);
     }
@@ -387,6 +411,43 @@ export function SwapProvider({
     updateLifecycleStatus,
   ]);
 
+  const handleClaim = useCallback(async () => {
+    if (!address) {
+      return;
+    }
+
+    try {
+      const hash = await withdrawAlloc();
+
+      updateLifecycleStatus({
+        statusName: "transactionPending",
+      });
+
+      const transactionReceipt = await waitForTransactionReceipt(config, {
+        hash: hash,
+      });
+
+      console.log(transactionReceipt);
+
+      if (transactionReceipt.status == "success") {
+        updateLifecycleStatus({
+          statusName: "success",
+        });
+      } else {
+        throw new Error("Donation failed");
+      }
+    } catch (err) {
+      updateLifecycleStatus({
+        statusName: "error",
+        statusData: {
+          code: "TmSPc02", // Transaction module SwapProvider component 02 error
+          error: JSON.stringify(err),
+          message: "errrrrr server",
+        },
+      });
+    }
+  }, [updateLifecycleStatus, accountConfig, sendTransactionAsync, chainId]);
+
   const value = useValue({
     address,
     configuration,
@@ -394,6 +455,7 @@ export function SwapProvider({
     handleAmountChange,
     handleToggle,
     handleSubmit,
+    handleClaim,
     lifecycleStatus,
     updateLifecycleStatus,
     to,
@@ -401,6 +463,7 @@ export function SwapProvider({
     setIsToastVisible,
     setTransactionHash,
     transactionHash,
+    claim,
   });
 
   return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>;

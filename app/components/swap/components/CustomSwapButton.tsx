@@ -9,19 +9,18 @@ import {
   text,
 } from "@coinbase/onchainkit/theme";
 
-export function SwapButton({
-  disabled = false,
+export function CustomSwapButton({
   buttonText = "Donate",
 }: {
-  disabled: boolean;
   buttonText: string;
 }) {
   const {
     address,
     to,
     from,
-    handleSubmit,
+    handleClaim,
     lifecycleStatus: { statusName },
+    claim,
   } = useSwapContext();
 
   const isLoading =
@@ -30,15 +29,7 @@ export function SwapButton({
     statusName === "transactionPending" ||
     statusName === "transactionApproved";
 
-  const isDisabled =
-    !from.amount ||
-    !from.token ||
-    !to.amount ||
-    !to.token ||
-    disabled ||
-    isLoading;
-
-  const isSwapInvalid = to.token?.address === from.token?.address;
+  const isDisabled = !claim || isLoading;
 
   if (!isDisabled && !address) {
     return (
@@ -70,8 +61,8 @@ export function SwapButton({
         isDisabled && pressable.disabled,
         text.headline
       )}
-      disabled={isDisabled || isSwapInvalid}
-      onClick={() => handleSubmit()}
+      disabled={isDisabled}
+      onClick={() => handleClaim()}
     >
       <span className={cn(text.headline, color.inverse)}>{buttonText}</span>
     </button>

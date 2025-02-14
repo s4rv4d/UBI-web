@@ -6,7 +6,6 @@ import { Address, erc20Abi } from "viem";
 import type { Token } from "@coinbase/onchainkit/token";
 import SwapperAbi from "../../../abi/UBISwapper.json";
 import { SwapParam } from "../utils/encodeExactInputSingle";
-import { ethers } from "ethers";
 
 export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
   const TOKEN_ADDRESS: Address = tokenIn?.address
@@ -62,12 +61,6 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
       };
 
       console.log(swapCallbackData);
-
-      const iface = new ethers.Interface(SwapperAbi.abi);
-
-      const cd = iface.encodeFunctionData("donate", [swapCallbackData]);
-
-      console.log("Encoded data: ", cd);
 
       const contractTx = await executeContract({
         address: CONTRACT_ADDRESS,

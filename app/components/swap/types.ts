@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { Address, Hex, TransactionReceipt } from "viem";
 import type {
@@ -83,6 +84,10 @@ export type LifecycleStatus =
     }
   | {
       statusName: "success";
+      statusData: LifecycleStatusDataShared;
+    }
+  | {
+      statusName: "fetching_claim";
       statusData: LifecycleStatusDataShared;
     };
 
@@ -265,6 +270,8 @@ export type SwapContextType = {
   setIsToastVisible: (visible: boolean) => void;
   transactionHash: string;
   setTransactionHash: (hash: string) => void;
+  handleClaim: () => void;
+  claim?: bigint;
 };
 
 export type FromTo = {
