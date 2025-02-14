@@ -1,18 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import type { ChangeEvent, InputHTMLAttributes } from "react";
-
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useLayoutEffect,
-  useRef,
-} from "react";
-
-import { cn } from "@/lib/utils";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,145 +14,50 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-function isValidAmount(value: string) {
-  if (value === "") {
-    return true;
-  }
-  const regex = /^[0-9]*\.?[0-9]*$/;
-  return regex.test(value);
-}
+import type { Token } from "@coinbase/onchainkit/token";
+import { SwapProvider } from "./swap/provider/SwapProvider";
+import { SwapAmountInput } from "./swap/components/SwapAmountInput";
+import { SwapButton } from "./swap/components/SwapButton";
+import { SwapMessage } from "./swap/components/SwapMessage";
+import { SwapToast } from "./swap/components/SwapToast";
 
-const useDebounce = (callback: (...args: any[]) => void, delay: number) => {
-  const callbackRef = useRef(callback);
-
-  useLayoutEffect(() => {
-    callbackRef.current = callback;
-  });
-
-  let timer: number | NodeJS.Timeout;
-
-  const debounce = (
-    func: (...args: any[]) => void,
-    delayMs: number,
-    ...args: any[]
-  ) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func(...args);
-    }, delayMs);
-  };
-
-  return useMemo(() => {
-    return (...args: any) => {
-      return debounce(callbackRef.current, delay, ...args);
-    };
-  }, [delay]);
-};
-
-type TextInputReact = {
-  "aria-label"?: string;
-  className: string;
-  delayMs: number;
-  disabled?: boolean;
-  // specify 'decimal' to trigger numeric keyboards on mobile devices
-  inputMode?: InputHTMLAttributes<HTMLInputElement>["inputMode"];
-  onBlur?: () => void;
-  onChange: (s: string) => void;
-  placeholder: string;
-  setValue: (s: string) => void;
-  value: string;
-  inputValidator?: (s: string) => boolean;
-};
-
-function formatTokenAmount(amount: string, decimals: number) {
-  // Convert the string amount to a number using decimals value
-  const numberAmount = Number(amount) / 10 ** decimals;
-  return numberAmount.toString();
-}
-
-function formatAmount(num: string): string {
-  // If the number is not in scientific notation return it as it is
-  if (!/\d+\.?\d*e[+-]*\d+/i.test(num)) {
-    return num;
-  }
-
-  // Parse into coefficient and exponent
-  const [coefficient, exponent] = num.toLowerCase().split("e");
-  const exp = Number.parseInt(exponent);
-
-  // Split coefficient into integer and decimal parts
-  const [intPart, decPart = ""] = coefficient.split(".");
-
-  // Combine integer and decimal parts
-  const fullNumber = intPart + decPart;
-
-  // Calculate the new decimal point position
-  const newPosition = intPart.length + exp;
-
-  if (newPosition <= 0) {
-    // If the new position is less than or equal to 0, we need to add leading zeros
-    return `0.${"0".repeat(Math.abs(newPosition))}${fullNumber}`;
-  }
-
-  if (newPosition >= fullNumber.length) {
-    // If the new position is greater than the number length, we need to add trailing zeros
-    return fullNumber + "0".repeat(newPosition - fullNumber.length);
-  }
-
-  // Otherwise, we insert the decimal point at the new position
-  return `${fullNumber.slice(0, newPosition)}.${fullNumber.slice(newPosition)}`;
-}
-
-function TextInput({
-  "aria-label": ariaLabel,
-  className,
-  delayMs,
-  disabled = false,
-  onBlur,
-  onChange,
-  placeholder,
-  setValue,
-  inputMode,
-  value,
-  inputValidator = () => true,
-}: TextInputReact) {
-  const handleDebounce = useDebounce((value) => {
-    onChange(value);
-  }, delayMs);
-
-  const handleChange = useCallback(
-    (evt: ChangeEvent<HTMLInputElement>) => {
-      const value = evt.target.value;
-
-      if (inputValidator(value)) {
-        setValue(value);
-        if (delayMs > 0) {
-          handleDebounce(value);
-        } else {
-          onChange(value);
-        }
-      }
-    },
-    [onChange, handleDebounce, delayMs, setValue, inputValidator]
-  );
-
-  return (
-    <input
-      aria-label={ariaLabel}
-      data-testid="ockTextInput_Input"
-      type="text"
-      className={className}
-      inputMode={inputMode}
-      placeholder={placeholder}
-      value={value}
-      onBlur={onBlur}
-      onChange={handleChange}
-      disabled={disabled}
-    />
-  );
-}
+// import { useAccount } from "wagmi";
+import { LifecycleStatus, SwapError } from "./swap/types";
 
 function CustomTab() {
+  //   const { address } = useAccount();
+
+  const WETHToken: Token = {
+    address: "0x4200000000000000000000000000000000000006",
+    chainId: 84532,
+    decimals: 18,
+    name: "Ethereum",
+    symbol: "ETH",
+    image:
+      "https://dynamic-assets.coinbase.com/dbb4b4983bde81309ddab83eb598358eb44375b930b94687ebe38bc22e52c3b2125258ffb8477a5ef22e33d6bd72e32a506c391caa13af64c00e46613c3e5806/asset_icons/4113b082d21cc5fab17fc8f2d19fb996165bcce635e6900f7fc2d57c4ef33ae9.png",
+  };
+
+  const DGMToken: Token = {
+    address: "0x2C0891219AE6f6adC9BE178019957B4743e5e790",
+    chainId: 84532,
+    decimals: 18,
+    name: "USDC",
+    symbol: "USDC",
+    image: "https://basescan.org/token/images/doginmeme2_32.png",
+  };
+
+  const BUILDToken: Token = {
+    address: "0xDBeE0FA9120300b03D9857954f067be95cf31597",
+    chainId: 84532,
+    decimals: 18,
+    name: "BUILD",
+    symbol: "BUILD",
+    image:
+      "https://dd.dexscreener.com/ds-data/tokens/base/0x3c281a39944a2319aa653d81cfd93ca10983d234.png?size=lg&key=c95e46",
+  };
+
+  const swappableTokens: Token[] = [WETHToken, DGMToken];
+
   return (
     <Tabs defaultValue="donate" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
@@ -173,29 +66,35 @@ function CustomTab() {
       </TabsList>
       <TabsContent value="donate">
         <Card>
-          <CardHeader>
-            <CardTitle>Donate ETH/ERC20</CardTitle>
-            <CardDescription>Donate to the cause LOl</CardDescription>
-          </CardHeader>
+          <CardHeader></CardHeader>
           <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <TextInput
-                className={cn(
-                  "mr-2 w-full  bg-transparent font-display text-[2.5rem] border border-input",
-                  "leading-none outline-none"
-                  //   hasInsufficientBalance && address
-                  //     ? color.error
-                  //     : color.foreground
-                )}
-                placeholder="0.0"
-                delayMs={1000}
-                value={formatAmount("0")}
-                setValue={() => {}}
-                disabled={false}
-                onChange={() => {}}
-                inputValidator={isValidAmount}
-              />
-            </div>
+            <SwapProvider
+              onError={(e: SwapError) => {
+                console.log(e.message);
+              }}
+              onStatus={(e: LifecycleStatus) => {
+                console.log(e.statusName);
+              }}
+              onSuccess={(r: any) => {
+                console.log(r);
+              }}
+            >
+              <>
+                <SwapAmountInput
+                  label="Convert"
+                  swappableTokens={swappableTokens}
+                  token={WETHToken}
+                  type="from"
+                />
+                <div className="relative h-1">{/* <SwapToggleButton /> */}</div>
+                <SwapAmountInput label="To" token={BUILDToken} type="to" />
+                <SwapButton disabled={false} />
+                <SwapToast />
+                <div className="flex">
+                  <SwapMessage />
+                </div>
+              </>
+            </SwapProvider>
           </CardContent>
         </Card>
       </TabsContent>

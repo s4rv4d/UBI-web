@@ -13,4 +13,5 @@ export const config = getDefaultConfig({
   transports: {
     [baseSepolia.id]: http(),
   },
+  ssr: true,
 });

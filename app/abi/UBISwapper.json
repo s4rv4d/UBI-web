@@ -1,0 +1,252 @@
+{
+  "abi": [
+    {
+      "type": "constructor",
+      "inputs": [
+        {
+          "name": "swapRouter_",
+          "type": "address",
+          "internalType": "contract ISwapRouter"
+        },
+        {
+          "name": "weth9_",
+          "type": "address",
+          "internalType": "address payable"
+        },
+        {
+          "name": "params_",
+          "type": "tuple",
+          "internalType": "struct UBISwapper.InitParams",
+          "components": [
+            { "name": "owner", "type": "address", "internalType": "address" },
+            { "name": "paused", "type": "bool", "internalType": "bool" },
+            {
+              "name": "beneficiary",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "tokenToBeneficiary",
+              "type": "address",
+              "internalType": "address"
+            }
+          ]
+        }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "donate",
+      "inputs": [
+        {
+          "name": "swapCallbackData",
+          "type": "tuple",
+          "internalType": "struct UBISwapper.SwapCallbackData",
+          "components": [
+            {
+              "name": "exactInputParams",
+              "type": "tuple",
+              "internalType": "struct ISwapRouter.ExactInputParams",
+              "components": [
+                { "name": "path", "type": "bytes", "internalType": "bytes" },
+                {
+                  "name": "recipient",
+                  "type": "address",
+                  "internalType": "address"
+                },
+                {
+                  "name": "amountIn",
+                  "type": "uint256",
+                  "internalType": "uint256"
+                },
+                {
+                  "name": "amountOutMinimum",
+                  "type": "uint256",
+                  "internalType": "uint256"
+                }
+              ]
+            },
+            {
+              "name": "recipient",
+              "type": "address",
+              "internalType": "address"
+            },
+            { "name": "isERC20", "type": "bool", "internalType": "bool" },
+            { "name": "amountIn", "type": "uint256", "internalType": "uint256" }
+          ]
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "setBeneficiary",
+      "inputs": [
+        { "name": "beneficiary_", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setPaused",
+      "inputs": [{ "name": "paused_", "type": "bool", "internalType": "bool" }],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setTokenToSwap",
+      "inputs": [
+        { "name": "token_", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "swapRouter",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "contract ISwapRouter"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "transferOwnership",
+      "inputs": [
+        { "name": "owner_", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "weth9",
+      "inputs": [],
+      "outputs": [
+        { "name": "", "type": "address", "internalType": "contract WETH" }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "event",
+      "name": "DepositedERC20",
+      "inputs": [
+        {
+          "name": "sender_",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount_",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "DepositedETH",
+      "inputs": [
+        {
+          "name": "sender_",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount_",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "OwnershipTransferred",
+      "inputs": [
+        {
+          "name": "oldOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "newOwner",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SetBeneficiary",
+      "inputs": [
+        {
+          "name": "beneficiary_",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SetPaused",
+      "inputs": [
+        {
+          "name": "paused",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SetTokenToSwap",
+      "inputs": [
+        {
+          "name": "tokenAddr_",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    { "type": "error", "name": "Paused", "inputs": [] },
+    { "type": "error", "name": "Unauthorized", "inputs": [] }
+  ]
+}
