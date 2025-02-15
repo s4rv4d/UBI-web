@@ -32,8 +32,7 @@ export function useFetchClaim({
         args: [1000n],
       });
       return withdrawTx;
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
       throw error;
     }
   };

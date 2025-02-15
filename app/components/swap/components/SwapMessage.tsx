@@ -14,6 +14,8 @@ export function SwapMessage({ className }: SwapMessageReact) {
     to,
   });
 
+  console.log(message, lifecycleStatus);
+
   return (
     <div
       className={cn(

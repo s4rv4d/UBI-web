@@ -37,8 +37,7 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
       });
 
       return approveTx;
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
       throw error;
     }
   };
@@ -71,8 +70,8 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
       });
 
       return contractTx;
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      console.log(error.details);
       throw error;
     }
   };

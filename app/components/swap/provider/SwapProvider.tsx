@@ -115,7 +115,7 @@ export function SwapProvider({
     };
 
     fetch();
-  }, [address, lifecycleStatus.statusName]);
+  }, [address, lifecycleStatus.statusName === "success"]);
 
   useEffect(() => {
     // Error
@@ -325,8 +325,6 @@ export function SwapProvider({
       return;
     }
 
-    // @audit OPTMISE THIS LATER
-
     try {
       const bigNumberValue = ethers.parseUnits(
         from.amount,
@@ -347,7 +345,7 @@ export function SwapProvider({
           hash: hash,
         });
 
-        console.log(transactionReceipt);
+        setTransactionHash(hash);
 
         if (transactionReceipt.status == "success") {
           updateLifecycleStatus({
@@ -377,6 +375,8 @@ export function SwapProvider({
             hash: donateHash,
           });
 
+          setTransactionHash(donateHash);
+
           if (donateReceipt.status == "success") {
             updateLifecycleStatus({
               statusName: "success",
@@ -388,13 +388,17 @@ export function SwapProvider({
           throw new Error("Approve failed");
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       updateLifecycleStatus({
         statusName: "error",
         statusData: {
-          code: "TmSPc02", // Transaction module SwapProvider component 02 error
-          error: JSON.stringify(err),
-          message: "errrrrr server",
+          code: "", // Transaction module SwapProvider component 02 error
+          error: JSON.stringify(err.details && err.details),
+          message: err.details
+            ? err.details
+            : err.message
+            ? err.message
+            : "error :(",
         },
       });
     }
@@ -427,22 +431,26 @@ export function SwapProvider({
         hash: hash,
       });
 
-      console.log(transactionReceipt);
+      setTransactionHash(hash);
 
       if (transactionReceipt.status == "success") {
         updateLifecycleStatus({
           statusName: "success",
         });
       } else {
-        throw new Error("Donation failed");
+        throw new Error("Claim failed");
       }
-    } catch (err) {
+    } catch (err: any) {
       updateLifecycleStatus({
         statusName: "error",
         statusData: {
-          code: "TmSPc02", // Transaction module SwapProvider component 02 error
-          error: JSON.stringify(err),
-          message: "errrrrr server",
+          code: "", // Transaction module SwapProvider component 02 error
+          error: JSON.stringify(err.details && err.details),
+          message: err.details
+            ? err.details
+            : err.message
+            ? err.message
+            : "error :(",
         },
       });
     }
