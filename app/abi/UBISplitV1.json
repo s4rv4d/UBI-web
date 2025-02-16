@@ -19,10 +19,83 @@
     },
     {
       "type": "function",
-      "name": "getAllocation",
+      "name": "claimAmount",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "claimCount",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "claimInterval",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "dateToClaimNext",
+      "inputs": [{ "name": "", "type": "address", "internalType": "address" }],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getClaimAmount",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getClaimCount",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getClaimInterval",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getClaimedAmount",
       "inputs": [
-        { "name": "_recipient", "type": "address", "internalType": "address" },
-        { "name": "_totalScore", "type": "uint256", "internalType": "uint256" }
+        { "name": "_recipient", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getNextClaimDate",
+      "inputs": [
+        { "name": "_recipient", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getScoreThreshold",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getUserAllocation",
+      "inputs": [
+        { "name": "_recipient", "type": "address", "internalType": "address" }
       ],
       "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
       "stateMutability": "view"
@@ -37,10 +110,34 @@
           "type": "address",
           "internalType": "address"
         },
-        { "name": "_vestingTime", "type": "uint256", "internalType": "uint256" }
+        {
+          "name": "_scoreThreshold",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "_claimAmount",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        { "name": "_claimCount", "type": "uint256", "internalType": "uint256" },
+        {
+          "name": "_claimInterval",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
       ],
       "outputs": [],
       "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "isValidUser",
+      "inputs": [
+        { "name": "_recipient", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+      "stateMutability": "view"
     },
     {
       "type": "function",
@@ -78,8 +175,67 @@
     },
     {
       "type": "function",
+      "name": "scoreThreshold",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "setClaimAmount",
+      "inputs": [
+        {
+          "name": "_newClaimAmount",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setClaimCount",
+      "inputs": [
+        {
+          "name": "_newClaimCount",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setClaimInterval",
+      "inputs": [
+        {
+          "name": "_newClaimInterval",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
       "name": "setPaused",
       "inputs": [{ "name": "paused_", "type": "bool", "internalType": "bool" }],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setScorethreshold",
+      "inputs": [
+        {
+          "name": "_newScorethreshold",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
       "outputs": [],
       "stateMutability": "nonpayable"
     },
@@ -108,7 +264,7 @@
     },
     {
       "type": "function",
-      "name": "userVesting",
+      "name": "userDoneClaimCount",
       "inputs": [{ "name": "", "type": "address", "internalType": "address" }],
       "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
       "stateMutability": "view"
@@ -122,17 +278,8 @@
     },
     {
       "type": "function",
-      "name": "vestingDuration",
-      "inputs": [],
-      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
       "name": "withdrawAllocation",
-      "inputs": [
-        { "name": "_totalScore", "type": "uint256", "internalType": "uint256" }
-      ],
+      "inputs": [],
       "outputs": [],
       "stateMutability": "nonpayable"
     },
@@ -202,6 +349,58 @@
     },
     {
       "type": "event",
+      "name": "UpdatedClaimAmount",
+      "inputs": [
+        {
+          "name": "_newClaimAmount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "UpdatedClaimCount",
+      "inputs": [
+        {
+          "name": "_newClaimCount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "UpdatedClaimInterval",
+      "inputs": [
+        {
+          "name": "_newClaimInterval",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "UpdatedScorethreshold",
+      "inputs": [
+        {
+          "name": "_newScorethreshold",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
       "name": "Upgraded",
       "inputs": [
         {
@@ -220,6 +419,8 @@
         { "name": "target", "type": "address", "internalType": "address" }
       ]
     },
+    { "type": "error", "name": "ClaimedEarly", "inputs": [] },
+    { "type": "error", "name": "ClaimedFullAllocation", "inputs": [] },
     {
       "type": "error",
       "name": "ERC1967InvalidImplementation",
@@ -235,19 +436,13 @@
     { "type": "error", "name": "FailedCall", "inputs": [] },
     { "type": "error", "name": "FailedToWithdraw", "inputs": [] },
     { "type": "error", "name": "InvalidInitialization", "inputs": [] },
-    {
-      "type": "error",
-      "name": "NoAllocation",
-      "inputs": [
-        { "name": "_builder", "type": "address", "internalType": "address" }
-      ]
-    },
+    { "type": "error", "name": "LessBUILDBalance", "inputs": [] },
     { "type": "error", "name": "NotInitializing", "inputs": [] },
     {
       "type": "error",
-      "name": "NothingToWithdraw",
+      "name": "NotValidScore",
       "inputs": [
-        { "name": "_builder", "type": "address", "internalType": "address" }
+        { "name": "_recipient", "type": "address", "internalType": "address" }
       ]
     },
     { "type": "error", "name": "Paused", "inputs": [] },

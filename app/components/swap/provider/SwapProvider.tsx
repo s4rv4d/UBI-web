@@ -70,6 +70,7 @@ export function SwapProvider({
   const [hasHandledSuccess, setHasHandledSuccess] = useState(false);
   const [latestCalldata, setLatestCalldata] = useState<SwapParam>();
   const [claim, setClaim] = useState<bigint>();
+  const [humanCheckVerified, setHumanCheckVerified] = useState<boolean>(false);
 
   const { from, to } = useFromTo(address);
   const { sendTransactionAsync } = useSendTransaction();
@@ -116,6 +117,23 @@ export function SwapProvider({
 
     fetch();
   }, [address, lifecycleStatus.statusName === "success"]);
+
+  useEffect(() => {
+    const fetchHumanCheck = async () => {
+      try {
+        const res = await fetch(`/api/check?address=${address}`);
+        const data = await res.json();
+        if (data && data.passport) {
+          console.log("data humancheck: ", data.passport.human_checkmark);
+          setHumanCheckVerified(data.passport.human_checkmark);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchHumanCheck();
+  }, [address]);
 
   useEffect(() => {
     // Error
@@ -472,6 +490,7 @@ export function SwapProvider({
     setTransactionHash,
     transactionHash,
     claim,
+    humanCheckVerified,
   });
 
   return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>;

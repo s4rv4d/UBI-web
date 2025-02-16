@@ -11,8 +11,11 @@ import { ethers } from "ethers";
 import { cn, color } from "@coinbase/onchainkit/theme";
 
 export function ClaimView() {
-  const { claim } = useSwapContext();
+  const { claim, humanCheckVerified } = useSwapContext();
   const claimAllocation = useValue(claim);
+
+  console.log("value is ", claimAllocation);
+  console.log("human check verified: ", humanCheckVerified);
 
   return (
     <>
@@ -21,14 +24,14 @@ export function ClaimView() {
         <div className="flex flex-col justify-center items-center">
           <span
             className={cn(
-              "ock-font-family font-semibold text-5xl",
+              "ock-font-family font-semibold text-8xl",
               color.foregroundMuted
             )}
           >
             {claimAllocation
-              ? parseFloat(
-                  ethers.formatEther(claimAllocation.toString())
-                ).toFixed(4)
+              ? humanCheckVerified
+                ? claimAllocation.toString()
+                : 0
               : 0}
           </span>
         </div>

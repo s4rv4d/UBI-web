@@ -152,26 +152,7 @@
     },
     {
       "type": "event",
-      "name": "DepositedERC20",
-      "inputs": [
-        {
-          "name": "sender_",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        },
-        {
-          "name": "amount_",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "DepositedETH",
+      "name": "Deposited",
       "inputs": [
         {
           "name": "sender_",

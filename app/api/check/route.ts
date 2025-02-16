@@ -6,15 +6,23 @@ export async function GET(request: Request) {
 
   try {
     // Forward the request to the external API
-    const response = await fetch(`${address}`);
+    const response = await fetch(
+      `https://api.talentprotocol.com/api/v2/passports/${address}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": process.env.NEXT_PUBLIC_TP_API_KEY as string,
+        },
+      }
+    );
     const data = await response.json();
 
     // Add CORS headers to the response
-    const headers = new Headers();
-    headers.set("Access-Control-Allow-Origin", "*"); // Allow all origins
-    headers.set("Content-Type", "application/json");
+    const hders = new Headers();
+    hders.set("Access-Control-Allow-Origin", "*"); // Allow all origins
+    hders.set("Content-Type", "application/json");
 
-    return new NextResponse(JSON.stringify(data), { headers });
+    return new NextResponse(JSON.stringify(data), { headers: hders });
   } catch {
     return NextResponse.json(
       { error: "Failed to fetch data" },
@@ -22,3 +30,5 @@ export async function GET(request: Request) {
     );
   }
 }
+
+/// list of users donated

@@ -17,8 +17,8 @@ export function useFetchClaim({
   } = useReadContract({
     address: process.env.NEXT_PUBLIC_splitProxy as Address,
     abi: UBISplitV1.abi,
-    functionName: "getAllocation",
-    args: [userAddress, 1000n],
+    functionName: "getUserAllocation",
+    args: [userAddress],
   });
 
   const { writeContractAsync: withdrawAllocation } = useWriteContract();
@@ -29,7 +29,6 @@ export function useFetchClaim({
         address: process.env.NEXT_PUBLIC_splitProxy as Address,
         abi: UBISplitV1.abi,
         functionName: "withdrawAllocation",
-        args: [1000n],
       });
       return withdrawTx;
     } catch (error: any) {
