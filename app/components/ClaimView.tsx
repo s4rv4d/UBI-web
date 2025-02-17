@@ -16,6 +16,7 @@ export function ClaimView() {
 
   console.log("value is ", claimAllocation);
   console.log("human check verified: ", humanCheckVerified);
+  console.log(ethers.id("Deposited(address,uint256)"));
 
   return (
     <>

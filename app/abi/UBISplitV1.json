@@ -86,13 +86,6 @@
     },
     {
       "type": "function",
-      "name": "getScoreThreshold",
-      "inputs": [],
-      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
       "name": "getUserAllocation",
       "inputs": [
         { "name": "_recipient", "type": "address", "internalType": "address" }
@@ -106,14 +99,9 @@
       "inputs": [
         { "name": "_buildToken", "type": "address", "internalType": "address" },
         {
-          "name": "_passportAddress",
+          "name": "_registryAddress",
           "type": "address",
           "internalType": "address"
-        },
-        {
-          "name": "_scoreThreshold",
-          "type": "uint256",
-          "internalType": "uint256"
         },
         {
           "name": "_claimAmount",
@@ -162,22 +150,15 @@
     },
     {
       "type": "function",
-      "name": "scoreContract",
+      "name": "registry",
       "inputs": [],
       "outputs": [
         {
           "name": "",
           "type": "address",
-          "internalType": "contract IPassportBuilderScore"
+          "internalType": "contract IUBIRegistry"
         }
       ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "scoreThreshold",
-      "inputs": [],
-      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
       "stateMutability": "view"
     },
     {
@@ -223,19 +204,6 @@
       "type": "function",
       "name": "setPaused",
       "inputs": [{ "name": "paused_", "type": "bool", "internalType": "bool" }],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "setScorethreshold",
-      "inputs": [
-        {
-          "name": "_newScorethreshold",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
       "outputs": [],
       "stateMutability": "nonpayable"
     },
@@ -379,19 +347,6 @@
       "inputs": [
         {
           "name": "_newClaimInterval",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "UpdatedScorethreshold",
-      "inputs": [
-        {
-          "name": "_newScorethreshold",
           "type": "uint256",
           "indexed": false,
           "internalType": "uint256"
