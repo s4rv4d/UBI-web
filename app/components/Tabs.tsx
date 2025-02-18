@@ -58,7 +58,7 @@ function CustomTab() {
         console.log(r);
       }}
     >
-      <Tabs defaultValue="donate" className="w-[400px]">
+      <Tabs defaultValue="donate" className="w-[350px] md:w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="donate">Donate</TabsTrigger>
           <TabsTrigger value="claim">Claim</TabsTrigger>
