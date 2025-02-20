@@ -11,7 +11,6 @@ export function useFetchClaim({
 }) {
   const {
     data: allocation,
-    isLoading,
     error,
     refetch,
   } = useReadContract({
@@ -21,7 +20,30 @@ export function useFetchClaim({
     args: [userAddress],
   });
 
-  const { writeContractAsync: withdrawAllocation } = useWriteContract();
+  const { data: dateToClaim, refetch: fetchDateToClaim } = useReadContract({
+    address: process.env.NEXT_PUBLIC_splitProxy as Address,
+    abi: UBISplitV1.abi,
+    functionName: "dateToClaimNext",
+    args: [userAddress],
+  });
+
+  const { data: totalClaimCount, refetch: fetchTotalCount } = useReadContract({
+    address: process.env.NEXT_PUBLIC_splitProxy as Address,
+    abi: UBISplitV1.abi,
+    functionName: "getClaimCount",
+    args: [],
+  });
+
+  const { data: userClaimCount, refetch: fetchUserTotalCount } =
+    useReadContract({
+      address: process.env.NEXT_PUBLIC_splitProxy as Address,
+      abi: UBISplitV1.abi,
+      functionName: "userDoneClaimCount",
+      args: [userAddress],
+    });
+
+  const { writeContractAsync: withdrawAllocation, error: withdrawError } =
+    useWriteContract();
 
   const withdrawAlloc = async () => {
     try {
@@ -32,9 +54,22 @@ export function useFetchClaim({
       });
       return withdrawTx;
     } catch (error: any) {
+      console.error("Errr2 ", error);
       throw error;
     }
   };
 
-  return { allocation, isLoading, error, refetch, withdrawAlloc };
+  return {
+    allocation,
+    error,
+    refetch,
+    withdrawAlloc,
+    withdrawError,
+    fetchDateToClaim,
+    dateToClaim,
+    totalClaimCount,
+    fetchTotalCount,
+    userClaimCount,
+    fetchUserTotalCount,
+  };
 }

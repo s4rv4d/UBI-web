@@ -28,6 +28,7 @@ import {
 } from "../utils/encodeExactInputSingle";
 import { Address } from "viem";
 import { config } from "@/app/config/config";
+import { toast } from "sonner";
 
 const FALLBACK_DEFAULT_MAX_SLIPPAGE = 3;
 
@@ -70,6 +71,9 @@ export function SwapProvider({
   const [hasHandledSuccess, setHasHandledSuccess] = useState(false);
   const [latestCalldata, setLatestCalldata] = useState<SwapParam>();
   const [claim, setClaim] = useState<bigint>();
+  const [totalClaimCount, setTotalClaimCount] = useState<bigint>();
+  const [dateToClaim, setDateToClaim] = useState<bigint>();
+  const [userClaimCount, setUserClaimCount] = useState<bigint>();
   const [humanCheckVerified, setHumanCheckVerified] = useState<boolean>(false);
 
   const { from, to } = useFromTo(address);
@@ -92,9 +96,11 @@ export function SwapProvider({
   });
 
   const {
-    allocation,
     refetch: quoteRefetch,
     withdrawAlloc,
+    fetchDateToClaim,
+    fetchTotalCount,
+    fetchUserTotalCount,
   } = useFetchClaim({
     userAddress: address,
   });
@@ -108,10 +114,15 @@ export function SwapProvider({
           statusName: "fetching_claim",
         });
 
-        const { data, error } = await quoteRefetch();
+        const { data: quoteData } = await quoteRefetch();
+        const { data: timeToClaimData } = await fetchDateToClaim();
+        const { data: totalCountData } = await fetchTotalCount();
+        const { data: userCountData } = await fetchUserTotalCount();
 
-        console.log("claim: ", data, error, allocation);
-        setClaim(data as bigint);
+        setClaim(quoteData as bigint);
+        setDateToClaim(timeToClaimData as bigint);
+        setTotalClaimCount(totalCountData as bigint);
+        setUserClaimCount(userCountData as bigint);
       }
     };
 
@@ -359,19 +370,40 @@ export function SwapProvider({
           statusName: "transactionPending",
         });
 
-        const transactionReceipt = await waitForTransactionReceipt(config, {
+        const transactionReceiptPr = waitForTransactionReceipt(config, {
           hash: hash,
         });
 
-        setTransactionHash(hash);
+        toast.promise(transactionReceiptPr, {
+          loading: "Executing Transaction...",
+          success: (data: any) => {
+            if (data.status == "success") {
+              updateLifecycleStatus({
+                statusName: "success",
+              });
+            } else {
+              throw new Error("Claim failed");
+            }
 
-        if (transactionReceipt.status == "success") {
-          updateLifecycleStatus({
-            statusName: "success",
-          });
-        } else {
-          throw new Error("Donation failed");
-        }
+            return "Donate done";
+          },
+          error: (data: any) => {
+            updateLifecycleStatus({
+              statusName: "error",
+              statusData: {
+                code: "", // Transaction module SwapProvider component 02 error
+                error: "",
+                message: "",
+              },
+            });
+
+            return data.details
+              ? data.details
+              : data.message
+              ? data.message
+              : "error :(";
+          },
+        });
       } else {
         const approveHash = await approveERC({ value: bigNumberValue });
 
@@ -384,39 +416,59 @@ export function SwapProvider({
         });
 
         if (transactionReceipt.status == "success") {
+          toast.success("Approved allocation");
           const donateHash = await donate({
             value: bigNumberValue,
             calldata: latestCalldata as SwapParam,
           });
 
-          const donateReceipt = await waitForTransactionReceipt(config, {
+          const donateReceiptPr = waitForTransactionReceipt(config, {
             hash: donateHash,
           });
 
-          setTransactionHash(donateHash);
+          toast.promise(donateReceiptPr, {
+            loading: "Executing Transaction...",
+            success: (data: any) => {
+              if (data.status == "success") {
+                updateLifecycleStatus({
+                  statusName: "success",
+                });
+              } else {
+                throw new Error("Claim failed");
+              }
 
-          if (donateReceipt.status == "success") {
-            updateLifecycleStatus({
-              statusName: "success",
-            });
-          } else {
-            throw new Error("Donation failed");
-          }
+              return "Donate done";
+            },
+            error: (data: any) => {
+              updateLifecycleStatus({
+                statusName: "error",
+                statusData: {
+                  code: "", // Transaction module SwapProvider component 02 error
+                  error: "",
+                  message: "",
+                },
+              });
+
+              return data.details
+                ? data.details
+                : data.message
+                ? data.message
+                : "error :(";
+            },
+          });
         } else {
+          toast.error("Approve failed");
           throw new Error("Approve failed");
         }
       }
     } catch (err: any) {
+      toast.error("Donate failed");
       updateLifecycleStatus({
         statusName: "error",
         statusData: {
           code: "", // Transaction module SwapProvider component 02 error
           error: JSON.stringify(err.details && err.details),
-          message: err.details
-            ? err.details
-            : err.message
-            ? err.message
-            : "error :(",
+          message: "",
         },
       });
     }
@@ -445,30 +497,50 @@ export function SwapProvider({
         statusName: "transactionPending",
       });
 
-      const transactionReceipt = await waitForTransactionReceipt(config, {
+      setTransactionHash(hash);
+
+      const transactionReceiptPr = waitForTransactionReceipt(config, {
         hash: hash,
       });
 
-      setTransactionHash(hash);
+      toast.promise(transactionReceiptPr, {
+        loading: "Executing Transaction...",
+        success: (data: any) => {
+          if (data.status == "success") {
+            updateLifecycleStatus({
+              statusName: "success",
+            });
+          } else {
+            throw new Error("Claim failed");
+          }
 
-      if (transactionReceipt.status == "success") {
-        updateLifecycleStatus({
-          statusName: "success",
-        });
-      } else {
-        throw new Error("Claim failed");
-      }
+          return "Claim done";
+        },
+        error: (data: any) => {
+          updateLifecycleStatus({
+            statusName: "error",
+            statusData: {
+              code: "", // Transaction module SwapProvider component 02 error
+              error: "",
+              message: "",
+            },
+          });
+
+          return data.details
+            ? data.details
+            : data.message
+            ? data.message
+            : "error :(";
+        },
+      });
     } catch (err: any) {
+      toast.error("Claim failed");
       updateLifecycleStatus({
         statusName: "error",
         statusData: {
           code: "", // Transaction module SwapProvider component 02 error
           error: JSON.stringify(err.details && err.details),
-          message: err.details
-            ? err.details
-            : err.message
-            ? err.message
-            : "error :(",
+          message: "",
         },
       });
     }
@@ -491,6 +563,9 @@ export function SwapProvider({
     transactionHash,
     claim,
     humanCheckVerified,
+    timeToClaim: dateToClaim,
+    totalClaimCount: totalClaimCount,
+    userClaimCount: userClaimCount,
   });
 
   return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>;

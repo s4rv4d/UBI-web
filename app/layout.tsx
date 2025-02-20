@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Provider } from "./providers/provider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,10 +39,10 @@ const frameMetadata = {
 export const metadata: Metadata = {
   title: "UBI",
   description: "Universal Builder Income",
-  other: {
-    "fc:frame": JSON.stringify(frameMetadata),
-    "og:image": frameMetadata.imageUrl,
-  },
+  // other: {
+  //   "fc:frame": JSON.stringify(frameMetadata),
+  //   "og:image": frameMetadata.imageUrl,
+  // },
 };
 
 export default function RootLayout({
@@ -54,6 +55,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster position="top-right" richColors={true} />
         <Provider>{children}</Provider>
       </body>
     </html>

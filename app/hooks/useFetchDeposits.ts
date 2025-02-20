@@ -2,9 +2,10 @@
 import { useState, useEffect } from "react";
 
 import { v4 as uuidv4 } from "uuid";
-import { useWatchContractEvent } from "wagmi";
+import { useWatchContractEvent, useReadContract } from "wagmi";
 import { ethers, FallbackProvider, JsonRpcProvider } from "ethers";
 import UBISwapper from "../abi/UBISwapper.json";
+import ERC20 from "../abi/ERC20.json";
 import { Address } from "viem";
 import { useClient } from "wagmi";
 import { fetchConfig, config } from "../config/config";
@@ -40,6 +41,8 @@ export function useFetchDeposits() {
   const client = useClient({
     config: fetchConfig,
   });
+
+  const erc20Abi = ["function balanceOf(address owner) view returns (uint256)"];
 
   useEffect(() => {
     const provider = clientToProvider(client);
@@ -122,5 +125,16 @@ export function useFetchDeposits() {
     config,
   });
 
-  return deposits;
+  const { data: poolBalance, error: balError } = useReadContract({
+    address: process.env.NEXT_PUBLIC_buildToken as Address,
+    abi: ERC20.abi,
+    functionName: "balanceOf",
+    args: [process.env.NEXT_PUBLIC_splitProxy as Address],
+    config,
+  });
+
+  console.log(balError);
+  console.log(poolBalance);
+
+  return { deposits, poolBalance };
 }

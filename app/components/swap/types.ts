@@ -273,6 +273,9 @@ export type SwapContextType = {
   handleClaim: () => void;
   claim?: bigint;
   humanCheckVerified?: boolean;
+  timeToClaim?: bigint;
+  totalClaimCount?: bigint;
+  userClaimCount?: bigint;
 };
 
 export type FromTo = {

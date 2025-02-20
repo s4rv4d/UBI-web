@@ -22,6 +22,9 @@ export function CustomSwapButton({
     lifecycleStatus: { statusName },
     claim,
     humanCheckVerified,
+    timeToClaim,
+    totalClaimCount,
+    userClaimCount,
   } = useSwapContext();
 
   const isLoading =
@@ -30,7 +33,12 @@ export function CustomSwapButton({
     statusName === "transactionPending" ||
     statusName === "transactionApproved";
 
-  const isDisabled = !claim || isLoading || !humanCheckVerified;
+  const isDisabled =
+    (claim && claim <= 0n) ||
+    isLoading ||
+    timeToClaim !== 0n ||
+    userClaimCount === totalClaimCount ||
+    !humanCheckVerified;
 
   if (!isDisabled && !address) {
     return (

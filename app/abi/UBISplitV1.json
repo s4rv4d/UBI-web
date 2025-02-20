@@ -272,6 +272,24 @@
     },
     {
       "type": "event",
+      "name": "ClaimedEarly",
+      "inputs": [],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "ClaimedFullAllocation",
+      "inputs": [],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "FailedToWithdraw",
+      "inputs": [],
+      "anonymous": false
+    },
+    {
+      "type": "event",
       "name": "Initialized",
       "inputs": [
         {
@@ -279,6 +297,25 @@
           "type": "uint64",
           "indexed": false,
           "internalType": "uint64"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "LessBUILDBalance",
+      "inputs": [],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "NotValidScore",
+      "inputs": [
+        {
+          "name": "_recipient",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
         }
       ],
       "anonymous": false
@@ -374,8 +411,6 @@
         { "name": "target", "type": "address", "internalType": "address" }
       ]
     },
-    { "type": "error", "name": "ClaimedEarly", "inputs": [] },
-    { "type": "error", "name": "ClaimedFullAllocation", "inputs": [] },
     {
       "type": "error",
       "name": "ERC1967InvalidImplementation",
@@ -389,17 +424,8 @@
     },
     { "type": "error", "name": "ERC1967NonPayable", "inputs": [] },
     { "type": "error", "name": "FailedCall", "inputs": [] },
-    { "type": "error", "name": "FailedToWithdraw", "inputs": [] },
     { "type": "error", "name": "InvalidInitialization", "inputs": [] },
-    { "type": "error", "name": "LessBUILDBalance", "inputs": [] },
     { "type": "error", "name": "NotInitializing", "inputs": [] },
-    {
-      "type": "error",
-      "name": "NotValidScore",
-      "inputs": [
-        { "name": "_recipient", "type": "address", "internalType": "address" }
-      ]
-    },
     { "type": "error", "name": "Paused", "inputs": [] },
     { "type": "error", "name": "UUPSUnauthorizedCallContext", "inputs": [] },
     {
