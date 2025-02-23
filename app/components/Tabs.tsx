@@ -13,38 +13,24 @@ import { SwapToast } from "./swap/components/SwapToast";
 import { ClaimView } from "./ClaimView";
 
 import { LifecycleStatus, SwapError } from "./swap/types";
+import {
+  getTokensByChainId,
+  getFinalTokenByChainId,
+  getDefaultDepositTokenByChainId,
+} from "../../utils/tokens";
 
 function CustomTab() {
-  const WETHToken: Token = {
-    address: "0x4200000000000000000000000000000000000006",
-    chainId: 84532,
-    decimals: 18,
-    name: "Ethereum",
-    symbol: "ETH",
-    image:
-      "https://dynamic-assets.coinbase.com/dbb4b4983bde81309ddab83eb598358eb44375b930b94687ebe38bc22e52c3b2125258ffb8477a5ef22e33d6bd72e32a506c391caa13af64c00e46613c3e5806/asset_icons/4113b082d21cc5fab17fc8f2d19fb996165bcce635e6900f7fc2d57c4ef33ae9.png",
-  };
+  const WETHToken: Token = getDefaultDepositTokenByChainId(
+    Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+  );
 
-  const DGMToken: Token = {
-    address: "0x2C0891219AE6f6adC9BE178019957B4743e5e790",
-    chainId: 84532,
-    decimals: 18,
-    name: "USDC",
-    symbol: "USDC",
-    image: "https://basescan.org/token/images/doginmeme2_32.png",
-  };
+  const BUILDToken: Token = getFinalTokenByChainId(
+    Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+  );
 
-  const BUILDToken: Token = {
-    address: "0xDBeE0FA9120300b03D9857954f067be95cf31597",
-    chainId: 84532,
-    decimals: 18,
-    name: "BUILD",
-    symbol: "BUILD",
-    image:
-      "https://dd.dexscreener.com/ds-data/tokens/base/0x3c281a39944a2319aa653d81cfd93ca10983d234.png?size=lg&key=c95e46",
-  };
-
-  const swappableTokens: Token[] = [WETHToken, DGMToken];
+  const swappableTokens: Token[] = getTokensByChainId(
+    Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+  );
 
   return (
     <SwapProvider

@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import sdk from "@farcaster/frame-sdk";
 
 export default function Home() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mounted, setMounted] = useState(false);
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const { deposits, poolBalance } = useFetchDeposits();
@@ -99,4 +100,4 @@ export default function Home() {
   );
 }
 
-// TOAST, ENV VARS CHAIN ID
+//ENV VARS CHAIN ID

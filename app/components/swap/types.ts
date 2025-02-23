@@ -17,7 +17,6 @@ export type SendSwapTransactionParams = {
   isSponsored?: boolean; // Whether the swap is sponsored (default: false)
   paymaster?: string; // OnchainKit config paymaster RPC url
   // biome-ignore lint: cannot find module 'wagmi/experimental/query'
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sendCallsAsync: any;
   sendTransactionAsync: SendTransactionMutateAsync<Config, unknown>;
   transactions: SwapTransaction[]; // A list of transactions to execute

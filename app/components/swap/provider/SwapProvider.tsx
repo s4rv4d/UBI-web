@@ -516,6 +516,7 @@ export function SwapProvider({
 
           return "Claim done";
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         error: (data: any) => {
           updateLifecycleStatus({
             statusName: "error",
@@ -526,11 +527,7 @@ export function SwapProvider({
             },
           });
 
-          return data.details
-            ? data.details
-            : data.message
-            ? data.message
-            : "error :(";
+          return "Claim failed";
         },
       });
     } catch (err: any) {

@@ -49,14 +49,16 @@ export function useQuote({
       : ethers.toBigInt(0); // Default to 0 if amountIn is invalid
 
   const { data, isLoading, error, refetch } = useReadContract({
-    address: QUOTER_ADDRESSES[84532] as Address,
+    address: QUOTER_ADDRESSES[
+      Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+    ] as Address,
     abi: QuoterABI.abi,
     functionName: "quoteExactInput",
     args: [
       path, // Address of the output token
       parsedAmountIn, // Amount of input token in smallest units
     ],
-    chainId: 84532,
+    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
   });
 
   return { quote: data, isLoading, error, refetch };

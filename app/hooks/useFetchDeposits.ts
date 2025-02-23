@@ -42,8 +42,6 @@ export function useFetchDeposits() {
     config: fetchConfig,
   });
 
-  const erc20Abi = ["function balanceOf(address owner) view returns (uint256)"];
-
   useEffect(() => {
     const provider = clientToProvider(client);
 
@@ -79,7 +77,7 @@ export function useFetchDeposits() {
           return {
             depositor: depositor,
             amount: ethers.formatEther(amount),
-            blockNumber: event.blockNumber,
+            blockNumber: BigInt(event.blockNumber),
             id: uuidv4(),
           };
         });
@@ -105,13 +103,15 @@ export function useFetchDeposits() {
 
         let depositor: string = "unknown";
         let amount: bigint = 0n;
-        if ("args" in log && log.args && log.args.sender_) {
-          depositor = log.args.sender_;
+
+        if ("args" in log && log.args) {
+          const args = log.args as { sender_?: string; amount_?: bigint };
+          depositor = args.sender_ ? args.sender_ : "unknown";
+          if (args.amount_) {
+            amount = args.amount_;
+          }
         }
 
-        if ("args" in log && log.args && log.args.amount_) {
-          amount = log.args.amount_;
-        }
         const newEvent: DepositedEvent = {
           depositor: depositor,
           amount: ethers.formatEther(amount),

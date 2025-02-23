@@ -13,7 +13,7 @@ const ETH_DECIMALS = 18;
 export function useGetETHBalance(address?: Address): UseGetETHBalanceResponse {
   const ethBalanceResponse: UseBalanceReturnType = useBalance({
     address,
-    chainId: 84532,
+    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
   });
 
   return useMemo(() => {

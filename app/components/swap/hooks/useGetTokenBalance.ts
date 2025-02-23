@@ -21,7 +21,7 @@ export function useGetTokenBalance(
     query: {
       enabled: !!token?.address && !!address,
     },
-    chainId: 84532,
+    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
   });
   return useMemo(() => {
     let error: SwapError | undefined;
