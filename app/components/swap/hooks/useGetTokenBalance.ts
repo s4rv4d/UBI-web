@@ -6,7 +6,7 @@ import type { UseReadContractReturnType } from "wagmi";
 import { getRoundedAmount } from "../utils/getRoundedAmount";
 import type { SwapError } from "../types";
 import { getSwapErrorCode } from "../../swap/utils/getSwapErrorCode";
-import type { Token } from "@coinbase/onchainkit/token";
+import { Token } from "@/types/tokenType";
 import type { UseGetTokenBalanceResponse } from "../types";
 
 export function useGetTokenBalance(

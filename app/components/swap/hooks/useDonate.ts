@@ -3,7 +3,7 @@
 
 import { useWriteContract } from "wagmi";
 import { Address, erc20Abi } from "viem";
-import type { Token } from "@coinbase/onchainkit/token";
+import { Token } from "@/types/tokenType";
 import SwapperAbi from "../../../abi/UBISwapper.json";
 import { SwapParam } from "../utils/encodeExactInputSingle";
 
@@ -59,6 +59,8 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
         amountIn: value,
       };
 
+      const ethValue: bigint = isDepositEth ? value : 0n;
+
       console.log(swapCallbackData);
 
       const contractTx = await executeContract({
@@ -66,7 +68,7 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
         abi: SwapperAbi.abi,
         functionName: "donate",
         args: [swapCallbackData],
-        value,
+        value: ethValue,
       });
 
       return contractTx;

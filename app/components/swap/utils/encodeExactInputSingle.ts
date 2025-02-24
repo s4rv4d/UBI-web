@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import SwapRouter from "@uniswap/v3-periphery/artifacts/contracts/interfaces/ISwapRouter.sol/ISwapRouter.json";
-import type { Token } from "@coinbase/onchainkit/token";
+import { Token } from "@/types/tokenType";
 import { Address } from "viem";
 import { ethers } from "ethers";
 import { encodePacked } from "viem";

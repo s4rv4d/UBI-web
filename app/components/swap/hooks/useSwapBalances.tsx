@@ -1,6 +1,6 @@
 import type { Address } from "viem";
 import { useValue } from "./useValue";
-import type { Token } from "@coinbase/onchainkit/token";
+import { Token } from "@/types/tokenType";
 import { useGetETHBalance } from "./useGetETHBalance";
 import { useGetTokenBalance } from "./useGetTokenBalance";
 

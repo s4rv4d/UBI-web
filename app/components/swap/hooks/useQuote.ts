@@ -4,18 +4,17 @@ import { useReadContract } from "wagmi";
 import { Address } from "viem";
 import { ethers } from "ethers";
 import { QUOTER_ADDRESSES } from "@uniswap/sdk-core";
-import type { Token } from "@coinbase/onchainkit/token";
+
+import { Token } from "@/types/tokenType";
 import QuoterABI from "@uniswap/v3-periphery/artifacts/contracts/interfaces/IQuoter.sol/IQuoter.json";
 
 export function useQuote({
   tokenIn,
   tokenOut,
-  fee,
   amountIn,
 }: {
   tokenIn: Token | undefined;
   tokenOut: Token | undefined;
-  fee: any;
   amountIn: any;
 }) {
   // const chainId = useChainId();
@@ -26,9 +25,9 @@ export function useQuote({
       ["address", "uint24", "address", "uint24", "address"],
       [
         tokenIn?.address ?? "0x0000000000000000000000000000000000000000",
-        fee,
+        tokenIn?.fee ?? 3000n,
         "0x4200000000000000000000000000000000000006",
-        fee, // Fee tier (e.g., 3000 for 0.3%)
+        tokenOut?.fee ?? 3000n,
         tokenOut?.address ?? "0x0000000000000000000000000000000000000000",
       ]
     );
@@ -37,7 +36,7 @@ export function useQuote({
       ["address", "uint24", "address"],
       [
         tokenIn?.address ?? "0x0000000000000000000000000000000000000000",
-        fee, // Fee tier (e.g., 3000 for 0.3%)
+        tokenOut?.fee ?? 3000n,
         tokenOut?.address ?? "0x0000000000000000000000000000000000000000",
       ]
     );

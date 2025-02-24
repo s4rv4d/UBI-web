@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { getName } from "@coinbase/onchainkit/identity";
 import { base } from "viem/chains";
 import { Address } from "viem";
+import { formatNumber } from "@/utils/amountFormatter";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
@@ -35,7 +36,7 @@ const TableCellView: React.FC<DepositedEvent> = ({ depositor, amount, id }) => {
     <TableRow>
       <TableCell className="font-medium">{ensName}</TableCell>
       <TableCell className="text-right">
-        {parseFloat(amount).toFixed(4)}
+        {formatNumber(parseFloat(amount))}
       </TableCell>
     </TableRow>
   );

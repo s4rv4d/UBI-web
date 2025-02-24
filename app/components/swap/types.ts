@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Token } from "@/types/tokenType";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { Address, Hex, TransactionReceipt } from "viem";
 import type {
@@ -7,8 +8,6 @@ import type {
   UseReadContractReturnType,
 } from "wagmi";
 import type { SendTransactionMutateAsync } from "wagmi/query";
-
-import type { Token } from "@coinbase/onchainkit/token";
 
 type Call = { to: Hex; data?: Hex; value?: bigint };
 

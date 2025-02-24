@@ -1,4 +1,4 @@
-import type { Token } from "@coinbase/onchainkit/token";
+import { Token } from "@/types/tokenType";
 
 // TESTNET
 const WETHToken: Token = {
@@ -9,6 +9,7 @@ const WETHToken: Token = {
   symbol: "ETH",
   image:
     "https://dynamic-assets.coinbase.com/dbb4b4983bde81309ddab83eb598358eb44375b930b94687ebe38bc22e52c3b2125258ffb8477a5ef22e33d6bd72e32a506c391caa13af64c00e46613c3e5806/asset_icons/4113b082d21cc5fab17fc8f2d19fb996165bcce635e6900f7fc2d57c4ef33ae9.png",
+  fee: 3000n,
 };
 
 const USDCToken: Token = {
@@ -19,6 +20,7 @@ const USDCToken: Token = {
   symbol: "USDC",
   image:
     "https://cdn.dexscreener.com/fetch?src=https%3A%2F%2Fcoin-images.coingecko.com%2Fcoins%2Fimages%2F6319%2Flarge%2Fusdc.png%3F1696506694",
+  fee: 500n,
 };
 
 const BUILDToken: Token = {
@@ -29,6 +31,7 @@ const BUILDToken: Token = {
   symbol: "BUILD",
   image:
     "https://dd.dexscreener.com/ds-data/tokens/base/0x3c281a39944a2319aa653d81cfd93ca10983d234.png?size=lg&key=c95e46",
+  fee: 10000n,
 };
 
 // MAINNET
@@ -40,6 +43,7 @@ const WETHBaseToken: Token = {
   symbol: "ETH",
   image:
     "https://dynamic-assets.coinbase.com/dbb4b4983bde81309ddab83eb598358eb44375b930b94687ebe38bc22e52c3b2125258ffb8477a5ef22e33d6bd72e32a506c391caa13af64c00e46613c3e5806/asset_icons/4113b082d21cc5fab17fc8f2d19fb996165bcce635e6900f7fc2d57c4ef33ae9.png",
+  fee: 3000n,
 };
 
 const BUILDTokenMainnet: Token = {
@@ -50,6 +54,7 @@ const BUILDTokenMainnet: Token = {
   symbol: "BUILD",
   image:
     "https://dd.dexscreener.com/ds-data/tokens/base/0x3c281a39944a2319aa653d81cfd93ca10983d234.png?size=lg&key=c95e46",
+  fee: 10000n,
 };
 
 const USDCTokenMainnet: Token = {
@@ -60,19 +65,52 @@ const USDCTokenMainnet: Token = {
   symbol: "USDC",
   image:
     "https://cdn.dexscreener.com/fetch?src=https%3A%2F%2Fcoin-images.coingecko.com%2Fcoins%2Fimages%2F6319%2Flarge%2Fusdc.png%3F1696506694",
+  fee: 500n,
 };
 
-const MFERTokenMainnet: Token = {
-  address: "0xE3086852A4B125803C815a158249ae468A3254Ca",
+const talentTokenMainnet: Token = {
+  address: "0x9a33406165f562E16C3abD82fd1185482E01b49a",
   chainId: 8453,
   decimals: 18,
-  name: "mfercoin",
-  symbol: "$mfer",
+  name: "TalentProtocolToken",
+  symbol: "$TALENT",
   image:
-    "https://dd.dexscreener.com/ds-data/tokens/base/0xe3086852a4b125803c815a158249ae468a3254ca.png?size=lg&key=df6600",
+    "https://dd.dexscreener.com/ds-data/tokens/base/0x9a33406165f562e16c3abd82fd1185482e01b49a.png?size=lg&key=381e75",
+  fee: 10000n,
 };
 
-// 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+const higherTokenMainnet: Token = {
+  address: "0x0578d8A44db98B23BF096A382e016e29a5Ce0ffe",
+  chainId: 8453,
+  decimals: 18,
+  name: "higher",
+  symbol: "HIGHER",
+  image:
+    "https://dd.dexscreener.com/ds-data/tokens/base/0x0578d8a44db98b23bf096a382e016e29a5ce0ffe.png?size=lg&key=53aa1f",
+  fee: 10000n,
+};
+
+const degenTokenMainnet: Token = {
+  address: "0x4ed4E862860beD51a9570b96d89aF5E1B0Efefed",
+  chainId: 8453,
+  decimals: 18,
+  name: "Degen",
+  symbol: "DEGEN",
+  image:
+    "https://dd.dexscreener.com/ds-data/tokens/base/0x4ed4e862860bed51a9570b96d89af5e1b0efefed.png?size=lg&key=ac292c",
+  fee: 3000n,
+};
+
+const moxieTokenMainnet: Token = {
+  address: "0x8C9037D1Ef5c6D1f6816278C7AAF5491d24CD527",
+  chainId: 8453,
+  decimals: 18,
+  name: "Moxie",
+  symbol: "MOXIE",
+  image:
+    "https://dd.dexscreener.com/ds-data/tokens/base/0x8c9037d1ef5c6d1f6816278c7aaf5491d24cd527.png?size=lg&key=ccceba",
+  fee: 3000n,
+};
 
 // An array containing all tokens
 const tokens: Token[] = [
@@ -80,7 +118,10 @@ const tokens: Token[] = [
   WETHBaseToken,
   USDCToken,
   USDCTokenMainnet,
-  MFERTokenMainnet,
+  talentTokenMainnet,
+  degenTokenMainnet,
+  moxieTokenMainnet,
+  higherTokenMainnet,
 ];
 
 export function getTokensByChainId(chainId: number): Token[] {

@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import type { Token } from "@coinbase/onchainkit/token";
+// import type { Token } from "@coinbase/onchainkit/token";
 import { SwapProvider } from "./swap/provider/SwapProvider";
 import { SwapAmountInput } from "./swap/components/SwapAmountInput";
 import { SwapButton } from "./swap/components/SwapButton";
@@ -20,15 +20,15 @@ import {
 } from "../../utils/tokens";
 
 function CustomTab() {
-  const WETHToken: Token = getDefaultDepositTokenByChainId(
+  const WETHToken = getDefaultDepositTokenByChainId(
     Number(process.env.NEXT_PUBLIC_CHAIN_ID)
   );
 
-  const BUILDToken: Token = getFinalTokenByChainId(
+  const BUILDToken = getFinalTokenByChainId(
     Number(process.env.NEXT_PUBLIC_CHAIN_ID)
   );
 
-  const swappableTokens: Token[] = getTokensByChainId(
+  const swappableTokens = getTokensByChainId(
     Number(process.env.NEXT_PUBLIC_CHAIN_ID)
   );
 
@@ -46,7 +46,7 @@ function CustomTab() {
     >
       <Tabs
         defaultValue="donate"
-        className="w-[350px] md:w-[400px] ock-font-family"
+        className="w-[350px] md:w-[400px] ock-font-family mt-52 md:mt-0"
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="donate">Donate</TabsTrigger>

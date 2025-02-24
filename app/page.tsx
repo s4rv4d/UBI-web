@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import CustomTab from "./components/Tabs";
 import { useFetchDeposits } from "./hooks/useFetchDeposits";
 import { formatUnits } from "viem";
+import { formatNumber } from "@/utils/amountFormatter";
 import TableCellView from "./components/swap/TableCellView";
 
 import {
@@ -59,9 +60,14 @@ export default function Home() {
               <span className="font-light text-md">Total Donated</span>
               <div className="flex flex-row justify-center items-center gap-2">
                 <span className="font-semibold text-5xl">
-                  {parseFloat(
-                    formatUnits(poolBalance ? (poolBalance as bigint) : 0n, 18)
-                  ).toFixed(2)}
+                  {formatNumber(
+                    parseFloat(
+                      formatUnits(
+                        poolBalance ? (poolBalance as bigint) : 0n,
+                        18
+                      )
+                    )
+                  )}
                 </span>
                 <span className="font-light">BUILD</span>
               </div>

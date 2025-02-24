@@ -11,7 +11,7 @@ import {
 import { useValue } from "../hooks/useValue";
 import { getRoundedAmount } from "../utils/getRoundedAmount";
 import type { ChangeEvent, InputHTMLAttributes } from "react";
-import type { Token } from "@coinbase/onchainkit/token";
+import { Token } from "@/types/tokenType";
 import type { SwapAmountInputReact } from "../types";
 import { formatAmount } from "../utils/formatTokenAmount";
 import { useSwapContext } from "../provider/SwapProvider";

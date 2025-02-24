@@ -10,7 +10,7 @@ import {
 import { useAccount, useConfig, useSendTransaction } from "wagmi";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { useSwitchChain } from "wagmi";
-import type { Token } from "@coinbase/onchainkit/token";
+import { Token } from "@/types/tokenType";
 import type { SwapContextType, SwapProviderReact } from "../types";
 import { useLifecycleStatus } from "../hooks/useLifecycleStatus";
 import { useFromTo } from "../hooks/useFromTo";
@@ -91,7 +91,6 @@ export function SwapProvider({
   const { error, refetch } = useQuote({
     tokenIn: from.token,
     tokenOut: to.token,
-    fee,
     amountIn: from.amount,
   });
 
