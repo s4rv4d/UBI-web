@@ -40,7 +40,7 @@ export function CustomSwapButton({
     timeToClaim !== 0n ||
     userClaimCount === totalClaimCount ||
     !humanCheckVerified ||
-    (builderScore && builderScore < 60);
+    (builderScore ?? 0) < 60;
 
   if (!isDisabled && !address) {
     return (

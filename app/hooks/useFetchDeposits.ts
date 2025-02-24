@@ -42,10 +42,23 @@ export function useFetchDeposits() {
     config: fetchConfig,
   });
 
+  const {
+    data: poolBalance,
+    error: balError,
+    refetch,
+  } = useReadContract({
+    address: process.env.NEXT_PUBLIC_buildToken as Address,
+    abi: ERC20.abi,
+    functionName: "balanceOf",
+    args: [process.env.NEXT_PUBLIC_splitProxy as Address],
+    config,
+  });
+
   useEffect(() => {
     const provider = clientToProvider(client);
 
     async function fetchHistoricalEvents() {
+      await refetch();
       try {
         const contract = new ethers.Contract(
           process.env.NEXT_PUBLIC_ubiswapper as string,
@@ -89,7 +102,7 @@ export function useFetchDeposits() {
     }
 
     fetchHistoricalEvents();
-  }, [client]);
+  }, [client, refetch]);
 
   useWatchContractEvent({
     address: process.env.NEXT_PUBLIC_ubiswapper as Address,
@@ -97,6 +110,12 @@ export function useFetchDeposits() {
     eventName: "Deposited",
     onLogs(logs) {
       //   console.log("New logs!", logs);
+
+      const fetchBal = async () => {
+        await refetch();
+      };
+
+      fetchBal();
 
       logs.forEach((log) => {
         console.log(log);
@@ -122,14 +141,6 @@ export function useFetchDeposits() {
         setDeposits((prev) => [...prev, newEvent]);
       });
     },
-    config,
-  });
-
-  const { data: poolBalance, error: balError } = useReadContract({
-    address: process.env.NEXT_PUBLIC_buildToken as Address,
-    abi: ERC20.abi,
-    functionName: "balanceOf",
-    args: [process.env.NEXT_PUBLIC_splitProxy as Address],
     config,
   });
 

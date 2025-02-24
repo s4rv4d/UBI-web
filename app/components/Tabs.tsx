@@ -45,8 +45,8 @@ function CustomTab() {
       }}
     >
       <Tabs
-        defaultValue="claim"
-        className="w-[350px] md:w-[400px] ock-font-family mt-52 md:mt-0"
+        defaultValue="donate"
+        className="w-[350px] md:w-[400px] ock-font-family mb-10 md:mb-0"
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="donate">Donate</TabsTrigger>

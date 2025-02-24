@@ -53,10 +53,10 @@ export default function Home() {
     <>
       <Navbar />
       <div className="h-screen w-screen flex flex-col justify-center items-center ock-font-family">
-        <div className="flex flex-col md:flex-row justify-center items-center gap-9 md:gap-4 mt-52 md:mt-0">
+        <div className="flex flex-col-reverse md:flex-row justify-center items-center gap-9 md:gap-4">
           <CustomTab />
-          <div className="flex flex-col justify-center items-center gap-7 md:gap-5">
-            <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center gap-7 md:gap-5 mt-52 md:mt-0">
+            <div className="flex flex-col justify-center items-center mt-52 md:mt-0">
               <span className="font-light text-md">Total Donated</span>
               <div className="flex flex-row justify-center items-center gap-2">
                 <span className="font-semibold text-5xl">
