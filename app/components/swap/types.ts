@@ -274,6 +274,7 @@ export type SwapContextType = {
   timeToClaim?: bigint;
   totalClaimCount?: bigint;
   userClaimCount?: bigint;
+  builderScore?: number;
 };
 
 export type FromTo = {

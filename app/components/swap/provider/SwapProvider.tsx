@@ -75,6 +75,7 @@ export function SwapProvider({
   const [dateToClaim, setDateToClaim] = useState<bigint>();
   const [userClaimCount, setUserClaimCount] = useState<bigint>();
   const [humanCheckVerified, setHumanCheckVerified] = useState<boolean>(false);
+  const [builderScore, setBuilderScore] = useState<number>(0);
 
   const { from, to } = useFromTo(address);
   const { sendTransactionAsync } = useSendTransaction();
@@ -134,8 +135,9 @@ export function SwapProvider({
         const res = await fetch(`/api/check?address=${address}`);
         const data = await res.json();
         if (data && data.passport) {
-          console.log("data humancheck: ", data.passport.human_checkmark);
+          console.log("data humancheck: ", data.passport.score);
           setHumanCheckVerified(data.passport.human_checkmark);
+          setBuilderScore(data.passport.score);
         }
       } catch (error) {
         console.error(error);
@@ -562,6 +564,7 @@ export function SwapProvider({
     timeToClaim: dateToClaim,
     totalClaimCount: totalClaimCount,
     userClaimCount: userClaimCount,
+    builderScore,
   });
 
   return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>;

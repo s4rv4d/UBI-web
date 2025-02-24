@@ -25,6 +25,7 @@ export function CustomSwapButton({
     timeToClaim,
     totalClaimCount,
     userClaimCount,
+    builderScore,
   } = useSwapContext();
 
   const isLoading =
@@ -38,7 +39,8 @@ export function CustomSwapButton({
     isLoading ||
     timeToClaim !== 0n ||
     userClaimCount === totalClaimCount ||
-    !humanCheckVerified;
+    !humanCheckVerified ||
+    (builderScore && builderScore < 60);
 
   if (!isDisabled && !address) {
     return (
