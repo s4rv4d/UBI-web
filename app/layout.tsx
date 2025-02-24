@@ -21,28 +21,28 @@ const geistMono = Geist_Mono({
 //   description: "Created by @serverConnectd",
 // };
 
-// const frameMetadata = {
-//   version: "next",
-//   imageUrl: `${String(process.env.NEXT_PUBLIC_HOST_URL)}/splash.png`,
-//   button: {
-//     title: "UBI",
-//     action: {
-//       type: "launch_frame",
-//       name: "UBI Mini App",
-//       url: `${String(process.env.NEXT_PUBLIC_HOST_URL)}/`,
-//       splashImageUrl: `${String(process.env.NEXT_PUBLIC_HOST_URL)}/splash.png`,
-//       splashBackgroundColor: "#000000",
-//     },
-//   },
-// };
+const frameMetadata = {
+  version: "next",
+  imageUrl: `${String(process.env.NEXT_PUBLIC_HOST_URL)}/splash.png`,
+  button: {
+    title: "UBI",
+    action: {
+      type: "launch_frame",
+      name: "UBI Mini App",
+      url: `${String(process.env.NEXT_PUBLIC_HOST_URL)}/`,
+      splashImageUrl: `${String(process.env.NEXT_PUBLIC_HOST_URL)}/splash.png`,
+      splashBackgroundColor: "#000000",
+    },
+  },
+};
 
 export const metadata: Metadata = {
   title: "UBI",
   description: "Universal Builder Income",
-  // other: {
-  //   "fc:frame": JSON.stringify(frameMetadata),
-  //   "og:image": frameMetadata.imageUrl,
-  // },
+  other: {
+    "fc:frame": JSON.stringify(frameMetadata),
+    "og:image": frameMetadata.imageUrl,
+  },
 };
 
 export default function RootLayout({

@@ -45,15 +45,15 @@ function CustomTab() {
       }}
     >
       <Tabs
-        defaultValue="donate"
+        defaultValue="claim"
         className="w-[350px] md:w-[400px] ock-font-family mt-52 md:mt-0"
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="donate">Donate</TabsTrigger>
           <TabsTrigger value="claim">Claim</TabsTrigger>
         </TabsList>
-        <TabsContent value="donate">
-          <Card>
+        <TabsContent value="donate" className="">
+          <Card className="h-[481px]">
             <CardHeader></CardHeader>
             <CardContent className="space-y-2">
               <>
@@ -75,7 +75,7 @@ function CustomTab() {
           </Card>
         </TabsContent>
         <TabsContent value="claim">
-          <Card>
+          <Card className="h-[481px]">
             <ClaimView />
             <SwapToast />
           </Card>

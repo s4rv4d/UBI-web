@@ -2,8 +2,8 @@ import { useState } from "react";
 import type { Address } from "viem";
 import type { FromTo } from "../types";
 import { useSwapBalances } from "./useSwapBalances";
-import { Token } from "@coinbase/onchainkit/token";
 import { useValue } from "./useValue";
+import { Token } from "@/types/tokenType";
 
 export const useFromTo = (address?: Address): FromTo => {
   const [fromAmount, setFromAmount] = useState("");

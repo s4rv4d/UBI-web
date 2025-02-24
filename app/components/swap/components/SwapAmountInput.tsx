@@ -11,7 +11,6 @@ import {
 import { useValue } from "../hooks/useValue";
 import { getRoundedAmount } from "../utils/getRoundedAmount";
 import type { ChangeEvent, InputHTMLAttributes } from "react";
-import { Token } from "@/types/tokenType";
 import type { SwapAmountInputReact } from "../types";
 import { formatAmount } from "../utils/formatTokenAmount";
 import { useSwapContext } from "../provider/SwapProvider";
@@ -24,6 +23,7 @@ import {
   pressable,
   text,
 } from "@coinbase/onchainkit/theme";
+import { Token } from "@/types/tokenType";
 
 function isValidAmount(value: string) {
   if (value === "") {
@@ -158,7 +158,7 @@ export function SwapAmountInput({
   );
 
   const handleSetToken = useCallback(
-    (token: Token) => {
+    (token: any) => {
       source.setToken?.(token);
       handleAmountChange(type, source.amount, token);
     },
