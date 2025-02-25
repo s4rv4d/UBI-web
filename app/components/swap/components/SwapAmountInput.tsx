@@ -23,7 +23,7 @@ import {
   pressable,
   text,
 } from "@coinbase/onchainkit/theme";
-import { Token } from "@/types/tokenType";
+// import { Token } from "@/types/tokenType";
 
 function isValidAmount(value: string) {
   if (value === "") {
@@ -152,6 +152,7 @@ export function SwapAmountInput({
 
   const handleChange = useCallback(
     (amount: string) => {
+      console.log("amount: ", amount, type);
       handleAmountChange(type, amount);
     },
     [handleAmountChange, type]
@@ -159,6 +160,8 @@ export function SwapAmountInput({
 
   const handleSetToken = useCallback(
     (token: any) => {
+      console.log("sarvad  ", token.symbol, source.amount);
+
       source.setToken?.(token);
       handleAmountChange(type, source.amount, token);
     },
@@ -168,11 +171,7 @@ export function SwapAmountInput({
   // We are mocking the token selectors so I'm not able
   // to test this since the components aren't actually rendering
   const sourceTokenOptions = useMemo(() => {
-    return (
-      swappableTokens?.filter(
-        ({ symbol }: Token) => symbol !== destination.token?.symbol
-      ) ?? []
-    );
+    return swappableTokens ?? [];
   }, [swappableTokens, destination.token]);
 
   const hasInsufficientBalance =

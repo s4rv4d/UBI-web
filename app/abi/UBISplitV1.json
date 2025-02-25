@@ -272,24 +272,6 @@
     },
     {
       "type": "event",
-      "name": "ClaimedEarly",
-      "inputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "ClaimedFullAllocation",
-      "inputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "FailedToWithdraw",
-      "inputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
       "name": "Initialized",
       "inputs": [
         {
@@ -297,25 +279,6 @@
           "type": "uint64",
           "indexed": false,
           "internalType": "uint64"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "LessBUILDBalance",
-      "inputs": [],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "NotValidScore",
-      "inputs": [
-        {
-          "name": "_recipient",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
         }
       ],
       "anonymous": false

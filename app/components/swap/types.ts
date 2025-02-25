@@ -269,6 +269,7 @@ export type SwapContextType = {
   transactionHash: string;
   setTransactionHash: (hash: string) => void;
   handleClaim: () => void;
+  handleDeposit: () => void;
   claim?: bigint;
   humanCheckVerified?: boolean;
   timeToClaim?: bigint;

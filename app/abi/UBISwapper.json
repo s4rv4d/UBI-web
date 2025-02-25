@@ -37,7 +37,16 @@
     },
     {
       "type": "function",
-      "name": "donate",
+      "name": "deposit",
+      "inputs": [
+        { "name": "amountToSend", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "donateAndSwap",
       "inputs": [
         {
           "name": "swapCallbackData",

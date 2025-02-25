@@ -27,6 +27,8 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
 
   const { writeContractAsync: executeContract } = useWriteContract();
 
+  const { writeContractAsync: executeDeposit } = useWriteContract();
+
   const approveERC = async ({ value }: { value: bigint }) => {
     try {
       const approveTx = await approveToken({
@@ -38,6 +40,23 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
 
       return approveTx;
     } catch (error: any) {
+      throw error;
+    }
+  };
+
+  const deposit = async (value: bigint) => {
+    try {
+      const contractTx = await executeDeposit({
+        address: CONTRACT_ADDRESS,
+        abi: SwapperAbi.abi,
+        functionName: "deposit",
+        args: [value],
+        value: 0n,
+      });
+
+      return contractTx;
+    } catch (error: any) {
+      console.log(error.details);
       throw error;
     }
   };
@@ -66,7 +85,7 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
       const contractTx = await executeContract({
         address: CONTRACT_ADDRESS,
         abi: SwapperAbi.abi,
-        functionName: "donate",
+        functionName: "donateAndSwap",
         args: [swapCallbackData],
         value: ethValue,
       });
@@ -82,5 +101,6 @@ export function useDonate({ tokenIn }: { tokenIn: Token | undefined }) {
     approveERC,
     donate,
     isDepositEth,
+    deposit,
   };
 }

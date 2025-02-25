@@ -15,12 +15,12 @@ const WETHToken: Token = {
 const USDCToken: Token = {
   address: "0x2C0891219AE6f6adC9BE178019957B4743e5e790",
   chainId: 84532,
-  decimals: 6,
+  decimals: 18,
   name: "USDC",
   symbol: "USDC",
   image:
     "https://cdn.dexscreener.com/fetch?src=https%3A%2F%2Fcoin-images.coingecko.com%2Fcoins%2Fimages%2F6319%2Flarge%2Fusdc.png%3F1696506694",
-  fee: 500n,
+  fee: 3000n,
 };
 
 const BUILDToken: Token = {
@@ -31,7 +31,7 @@ const BUILDToken: Token = {
   symbol: "BUILD",
   image:
     "https://dd.dexscreener.com/ds-data/tokens/base/0x3c281a39944a2319aa653d81cfd93ca10983d234.png?size=lg&key=c95e46",
-  fee: 10000n,
+  fee: 3000n,
 };
 
 // MAINNET
@@ -122,6 +122,7 @@ const tokens: Token[] = [
   degenTokenMainnet,
   moxieTokenMainnet,
   higherTokenMainnet,
+  BUILDToken,
 ];
 
 export function getTokensByChainId(chainId: number): Token[] {

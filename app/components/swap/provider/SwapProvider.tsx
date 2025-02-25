@@ -84,7 +84,7 @@ export function SwapProvider({
   const fee = 3000n; // 0.3% Uniswap V3 fee tier
 
   //////
-  const { approveERC, donate, isDepositEth } = useDonate({
+  const { approveERC, donate, isDepositEth, deposit } = useDonate({
     tokenIn: from.token,
   });
   //////
@@ -256,11 +256,27 @@ export function SwapProvider({
           },
         });
 
+        console.log("hererere");
+
+        return;
+      }
+
+      if (source.token.symbol === "BUILD") {
+        updateLifecycleStatus({
+          statusName: "amountChange",
+          statusData: {
+            amountFrom: amount,
+            amountTo: "0",
+            tokenFrom: from.token,
+            tokenTo: to.token,
+            isMissingRequiredField: false,
+          },
+        });
+
         return;
       }
 
       destination.setLoading(true);
-      console.log(type);
       updateLifecycleStatus({
         statusName: "amountChange",
         statusData: {
@@ -272,78 +288,90 @@ export function SwapProvider({
         },
       });
 
-      try {
+      if (source.token.symbol !== "BUILD") {
         try {
-          const { data, error } = await refetch(); // Fetch the quote manually
+          try {
+            const { data, error } = await refetch(); // Fetch the quote manually
 
-          console.log(data, error);
-          console.log(from.token);
-          if (data) {
-            const bignU = ethers.toBigInt(data as BigNumberish);
+            console.log(data, error);
+            console.log(from.token);
+            if (data) {
+              const bignU = ethers.toBigInt(data as BigNumberish);
 
-            const formattedAmount = formatTokenAmount(
-              bignU.toString(),
-              to.token?.decimals ?? 18
-            );
+              const formattedAmount = formatTokenAmount(
+                bignU.toString(),
+                to.token?.decimals ?? 18
+              );
 
-            // const formatInput = ethers.toBigInt();
-            const bigNumberValue = ethers.parseUnits(
-              amount,
-              from.token?.decimals ?? 18
-            );
+              // const formatInput = ethers.toBigInt();
+              const bigNumberValue = ethers.parseUnits(
+                amount,
+                from.token?.decimals ?? 18
+              );
 
-            console.log("bug number valie:", amount, bigNumberValue);
+              destination.setAmount(formattedAmount);
 
-            destination.setAmount(formattedAmount);
+              const userAddy: Address = process.env
+                .NEXT_PUBLIC_splitProxy as Address;
 
-            const userAddy: Address = process.env
-              .NEXT_PUBLIC_splitProxy as Address;
+              const path = contructPath({
+                tokenIn: from.token,
+                tokenOut: to.token,
+                fee,
+              });
 
-            const path = contructPath({
-              tokenIn: from.token,
-              tokenOut: to.token,
-              fee,
-            });
+              console.log("path: ", path);
 
-            console.log("path: ", path);
+              const calldata: SwapParam = encodeExactInput({
+                path,
+                recipient: userAddy,
+                amountIn: bigNumberValue,
+              });
 
-            const calldata: SwapParam = encodeExactInput({
-              path,
-              recipient: userAddy,
-              amountIn: bigNumberValue,
-            });
+              console.log("calldata: ", calldata);
 
-            console.log("calldata: ", calldata);
+              setLatestCalldata(calldata);
 
-            setLatestCalldata(calldata);
-
-            updateLifecycleStatus({
-              statusName: "amountChange",
-              statusData: {
-                amountFrom: type === "from" ? amount : formattedAmount,
-                amountTo: type === "to" ? amount : formattedAmount,
-                tokenFrom: from.token,
-                tokenTo: to.token,
-                // if quote was fetched successfully, we
-                // have all required fields
-                isMissingRequiredField: !formattedAmount,
-              },
-            });
+              updateLifecycleStatus({
+                statusName: "amountChange",
+                statusData: {
+                  amountFrom: type === "from" ? amount : formattedAmount,
+                  amountTo: type === "to" ? amount : formattedAmount,
+                  tokenFrom: from.token,
+                  tokenTo: to.token,
+                  // if quote was fetched successfully, we
+                  // have all required fields
+                  isMissingRequiredField: !formattedAmount,
+                },
+              });
+            }
+          } catch (err) {
+            console.error("Error fetching quote:", err, error);
           }
         } catch (err) {
-          console.error("Error fetching quote:", err, error);
+          updateLifecycleStatus({
+            statusName: "error",
+            statusData: {
+              code: "TmSPc01", // Transaction module SwapProvider component 01 error
+              error: JSON.stringify(err),
+              message: "",
+            },
+          });
+        } finally {
+          // reset loading state when quote request resolves
+          destination.setLoading(false);
         }
-      } catch (err) {
+      } else {
         updateLifecycleStatus({
-          statusName: "error",
+          statusName: "amountChange",
           statusData: {
-            code: "TmSPc01", // Transaction module SwapProvider component 01 error
-            error: JSON.stringify(err),
-            message: "",
+            amountFrom: amount,
+            amountTo: "0",
+            tokenFrom: from.token,
+            tokenTo: to.token,
+            isMissingRequiredField: false,
           },
         });
-      } finally {
-        // reset loading state when quote request resolves
         destination.setLoading(false);
       }
     },
@@ -544,6 +572,92 @@ export function SwapProvider({
     }
   }, [updateLifecycleStatus, accountConfig, sendTransactionAsync, chainId]);
 
+  const handleDeposit = useCallback(async () => {
+    console.log(address, from.amount, from);
+
+    if (!address || !from.token || !from.amount) {
+      return;
+    }
+
+    try {
+      const bigNumberValue = ethers.parseUnits(
+        from.amount,
+        from.token?.decimals ?? 18
+      );
+
+      console.log(from.amount, bigNumberValue);
+
+      const approveHash = await approveERC({ value: bigNumberValue });
+
+      updateLifecycleStatus({
+        statusName: "transactionPending",
+      });
+
+      const transactionReceipt = await waitForTransactionReceipt(config, {
+        hash: approveHash,
+      });
+
+      if (transactionReceipt.status == "success") {
+        toast.success("Approved allocation");
+        const depositHash = await deposit(bigNumberValue);
+
+        const donateReceiptPr = waitForTransactionReceipt(config, {
+          hash: depositHash,
+        });
+
+        toast.promise(donateReceiptPr, {
+          loading: "Executing Transaction...",
+          success: (data: any) => {
+            if (data.status == "success") {
+              updateLifecycleStatus({
+                statusName: "success",
+              });
+            } else {
+              throw new Error("deposit failed");
+            }
+
+            return "Deposit done";
+          },
+          error: (data: any) => {
+            updateLifecycleStatus({
+              statusName: "error",
+              statusData: {
+                code: "", // Transaction module SwapProvider component 02 error
+                error: "",
+                message: "",
+              },
+            });
+
+            return data.details
+              ? data.details
+              : data.message
+              ? data.message
+              : "error :(";
+          },
+        });
+      } else {
+        toast.error("Approve failed");
+        throw new Error("Approve failed");
+      }
+    } catch (err: any) {
+      toast.error("Deposit failed");
+      updateLifecycleStatus({
+        statusName: "error",
+        statusData: {
+          code: "", // Transaction module SwapProvider component 02 error
+          error: JSON.stringify(err.details && err.details),
+          message: "",
+        },
+      });
+    }
+  }, [
+    updateLifecycleStatus,
+    accountConfig,
+    chainId,
+    sendTransactionAsync,
+    lifecycleStatus,
+  ]);
+
   const value = useValue({
     address,
     configuration,
@@ -552,6 +666,7 @@ export function SwapProvider({
     handleToggle,
     handleSubmit,
     handleClaim,
+    handleDeposit,
     lifecycleStatus,
     updateLifecycleStatus,
     to,
