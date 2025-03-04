@@ -1,13 +1,6 @@
 "use client";
 import { useSwapContext } from "../provider/SwapProvider";
-import {
-  background,
-  border,
-  cn,
-  color,
-  pressable,
-  text,
-} from "@coinbase/onchainkit/theme";
+import { border, cn, color, pressable, text } from "@coinbase/onchainkit/theme";
 
 export function CustomDonateButton({
   buttonText = "Donate",
@@ -33,7 +26,7 @@ export function CustomDonateButton({
       <button
         type="button"
         className={cn(
-          background.primary,
+          "bg-[#0000EB]",
           border.radius,
           "w-full rounded-xl",
           "mt-4 px-4 py-3",
@@ -51,7 +44,7 @@ export function CustomDonateButton({
     <button
       type="button"
       className={cn(
-        background.primary,
+        "bg-[#0000EB]",
         border.radius,
         "w-full rounded-xl",
         "mt-4 px-4 py-3",
