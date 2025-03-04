@@ -22,8 +22,6 @@ export function ClaimView() {
 
   const countdownString = useCountdown(Number(timeToClaim || 0n));
 
-  // console.log(ethers.id("Deposited(address,uint256)"));
-
   return (
     <div className="h-[433px]">
       <CardHeader></CardHeader>

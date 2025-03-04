@@ -35,7 +35,7 @@ export function CustomSwapButton({
     statusName === "transactionApproved";
 
   const isDisabled =
-    (claim && claim <= 0n) ||
+    (claim ?? 0n) <= 0n ||
     isLoading ||
     timeToClaim !== 0n ||
     userClaimCount === totalClaimCount ||
