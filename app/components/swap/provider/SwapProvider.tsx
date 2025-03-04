@@ -403,6 +403,8 @@ export function SwapProvider({
           hash: hash,
         });
 
+        setTransactionHash(hash);
+
         toast.promise(transactionReceiptPr, {
           loading: "Executing Transaction...",
           success: (data: any) => {
@@ -454,6 +456,8 @@ export function SwapProvider({
           const donateReceiptPr = waitForTransactionReceipt(config, {
             hash: donateHash,
           });
+
+          setTransactionHash(donateHash);
 
           toast.promise(donateReceiptPr, {
             loading: "Executing Transaction...",

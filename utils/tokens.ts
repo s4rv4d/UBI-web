@@ -123,6 +123,7 @@ const tokens: Token[] = [
   moxieTokenMainnet,
   higherTokenMainnet,
   BUILDToken,
+  BUILDTokenMainnet,
 ];
 
 export function getTokensByChainId(chainId: number): Token[] {

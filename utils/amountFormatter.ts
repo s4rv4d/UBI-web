@@ -10,6 +10,6 @@ export function formatNumber(num: number): string {
   // For numbers below a million, format with commas and two decimals
   return num.toLocaleString("en-US", {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 4,
   });
 }
